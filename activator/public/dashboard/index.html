@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>激活码计算工具</title>
+    <link rel="stylesheet" href="/public/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- 标题 -->
+        <h1 class="page-title">计算工具</h1>
+
+        <!-- 复选框区域 -->
+        <div class="checkbox-group">
+            <h3 class="group-title">功能选项</h3>
+            <div class="checkbox-list">
+                <label class="checkbox-item">
+                    <input type="checkbox" name="calc-option" value="option1" id="ckbSegmentFlotation">
+                    <span>管片上浮</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="calc-option" value="option2" id="ckbSegmentConvergence">
+                    <span>管片收敛</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="calc-option" value="option3" id="ckbShieldTailClearance">
+                    <span>盾尾间隙测量</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="calc-option" value="option4" id="ckbSegmentTypeSelection">
+                    <span>管片选型</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="calc-option" value="option5" id="ckbSegmentFlatness">
+                    <span>管片平整度</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" name="calc-option" value="option6" id="ckbSegmentOvality">
+                    <span>管片椭圆度</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- 激活码输入区域 -->
+        <div class="code-group">
+            <h3 class="group-title">激活</h3>
+            <div class="input-list">
+                <div class="input-item">
+                    <label for="apply-code">申请码</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="apply-code" placeholder="请输入申请码（16位）">
+                        <p class="tips" id="apply-tips"></p>
+                    </div>
+                </div>
+                <div class="input-item">
+                    <label for="active-code">激活码</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="active-code" placeholder="点击计算得到激活码（16位）">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 计算按钮区域 -->
+        <div class="btn-area">
+            <button id="calc-btn" class="calc-btn">
+                计算
+            </button>
+            <button id="reset-btn" class="reset-btn">
+                重置
+            </button>
+        </div>
+    </div>
+
+    <!-- 简单交互逻辑 -->
+    <script src="/public/js/script.js"></script>
+</body>
+
+</html>

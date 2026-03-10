@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - 激活码计算工具</title>
+    <style>
+        /* 全局重置 - 完全保持与激活码工具一致的风格 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", "PingFang SC", "Inter", -apple-system, sans-serif;
+        }
+
+        /* 全局样式 - 与激活码工具保持一致 */
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+            padding: 20px;
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 主容器 - 完全沿用激活码工具的容器样式 */
+        .login-container {
+            max-width: 450px;
+            width: 100%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 35px 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        /* 页面标题 - 与.page-title保持一致 */
+        .login-container h1 {
+            text-align: center;
+            font-size: 24px;
+            color: #1f2937;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        /* 表单组 - 对应.checkbox-group的样式 */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        /* 分组标题 - 完全沿用.group-title */
+        .form-group h3 {
+            font-size: 16px;
+            color: #1f2937;
+            margin-bottom: 15px;
+            font-weight: 600;
+            position: relative;
+            padding-left: 10px;
+        }
+
+        .form-group h3::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 16px;
+            background-color: #4096ff;
+            border-radius: 2px;
+        }
+
+        /* 输入区域 - 完全沿用激活码工具的.input-wrapper样式 */
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-wrapper label {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .input-wrapper input:focus {
+            border-color: #4096ff;
+            box-shadow: 0 0 0 3px rgba(64, 150, 255, 0.1);
+        }
+
+        .input-wrapper input::placeholder {
+            color: #9ca3af;
+        }
+
+        /* 错误提示 - 沿用.tips样式但增强 */
+        .error-tip {
+            font-size: 12px;
+            line-height: 1;
+            padding-left: 10px;
+            color: #ff4d4f;
+            min-height: 18px;
+        }
+
+        /* 错误信息显示框 - 新增但保持风格一致 */
+        .error-message {
+            background-color: #ff4d4f;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin: 20px 0 10px;
+            font-size: 13px;
+            text-align: center;
+            animation: shake 0.3s ease;
+            display: none;
+        }
+
+        /* 按钮区域 - 完全沿用.btn-area样式 */
+        .btn-area {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+
+        /* 登录按钮 - 沿用.calc-btn样式 */
+        .login-btn {
+            padding: 12px 30px;
+            background-color: #4096ff;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            flex: 1;
+        }
+
+        .login-btn:hover {
+            background-color: #3385ff;
+            transform: translateY(-2px);
+        }
+
+        /* 重置按钮 - 沿用.reset-btn样式 */
+        .reset-btn {
+            padding: 12px 30px;
+            background-color: #f9fafb;
+            color: #6b7280;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            flex: 1;
+        }
+
+        .reset-btn:hover {
+            background-color: #f3f4f6;
+            color: #4b5563;
+        }
+
+        /* 注册链接区域 - 新增但保持风格 */
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .register-link a {
+            color: #4096ff;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .register-link a:hover {
+            color: #3385ff;
+            text-decoration: underline;
+        }
+
+        /* 提示文字 - 沿用原有风格 */
+        .tips {
+            font-size: 12px;
+            color: #9ca3af;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        /* 动画 - 新增但保持简洁 */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* 移动端适配 - 完全沿用激活码工具的响应式样式 */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .login-container {
+                padding: 25px 20px;
+            }
+
+            .login-container h1 {
+                font-size: 22px;
+            }
+
+            .btn-area {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .login-btn, .reset-btn {
+                width: 100%;
+            }
+        }
+
+        /* 记住密码复选框 - 沿用.checkbox-item样式 */
+        .remember-group {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+            color: #4b5563;
+        }
+
+        .checkbox-item input {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            accent-color: #4096ff;
+            cursor: pointer;
+        }
+
+        .checkbox-item span:hover {
+            color: #4096ff;
+        }
+
+        .forgot-link {
+            color: #4096ff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>登录</h1>
+        
+        <div class="form-group">
+            <h3>账号信息</h3>
+            <div class="input-wrapper">
+                <label>用户名</label>
+                <input type="text" id="username" placeholder="请输入用户名">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="input-wrapper">
+                <label>密码</label>
+                <input type="password" id="password" placeholder="请输入密码">
+            </div>
+            <div class="error-tip" id="password-tip"></div>
+        </div>
+
+        <!-- 错误提示区域 -->
+        <div class="error-message" id="error-message"></div>
+
+        <!-- 按钮区域 - 完全沿用激活码工具的按钮样式 -->
+        <div class="btn-area">
+            <button class="login-btn" id="loginBtn">
+                登 录
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // 获取元素
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const errorMessage = document.getElementById('error-message');
+        const passwordTip = document.getElementById('password-tip');
+
+        // 登录按钮点击事件
+        loginBtn.addEventListener('click', async function() {
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            // 表单验证
+            if (!username || !password) {
+                showError('用户名和密码不能为空');
+                return;
+            }
+
+            if (password.length < 6) {
+                passwordTip.textContent = '密码长度不能少于6位';
+                passwordTip.style.color = '#ff4d4f';
+                return;
+            } else {
+                passwordTip.textContent = '';
+            }
+
+            try {
+                // 显示加载状态
+                loginBtn.textContent = '登录中...';
+                loginBtn.disabled = true;
+
+                // 调用登录API
+                const response = await fetch('/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (response.ok) {
+                    // 登录成功，跳转到主界面
+                    window.location.href = '/dashboard/';
+                } else {
+                    const error = await response.text();
+                    showError(error || '用户名或密码错误');
+                }
+            } catch (error) {
+                showError('网络错误，请稍后重试');
+            } finally {
+                // 恢复按钮状态
+                loginBtn.textContent = '登 录';
+                loginBtn.disabled = false;
+            }
+        });
+
+        // 重置按钮点击事件
+        resetBtn.addEventListener('click', function() {
+            usernameInput.value = '';
+            passwordInput.value = '';
+            passwordTip.textContent = '';
+            errorMessage.style.display = 'none';
+        });
+
+        // 显示错误信息
+        function showError(text) {
+            errorMessage.textContent = text;
+            errorMessage.style.display = 'block';
+            
+            // 3秒后自动隐藏
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 3000);
+        }
+
+        // 回车键登录
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loginBtn.click();
+            }
+        });
+
+        // 输入时隐藏错误提示
+        usernameInput.addEventListener('input', function() {
+            errorMessage.style.display = 'none';
+        });
+
+        passwordInput.addEventListener('input', function() {
+            errorMessage.style.display = 'none';
+            passwordTip.textContent = '';
+        });
+    </script>
+</body>
+</html>
