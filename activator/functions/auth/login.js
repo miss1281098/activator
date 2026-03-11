@@ -12,7 +12,7 @@ export async function onRequest(context) {
       
       // 方案B：从 D1 数据库验证（推荐）
       const user = await env.DB.prepare(
-        'SELECT * FROM users WHERE username = ? AND password = ?'
+        'SELECT * FROM user WHERE username = ? AND password = ?'
       ).bind(username, password).first();
       
       if (user) {
