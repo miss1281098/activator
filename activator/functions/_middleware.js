@@ -6,7 +6,8 @@ export async function onRequest(context) {
     // 公开路由列表（不需要登录）
     const publicPaths = [
       '/',              // 登录页
-      '/auth/login',    // 登录API
+      '/api/login',    // 登录API
+      '/api/calculate',
       '/css/',          // 样式文件
       '/js/',           // 脚本文件
       '/images/',       // 图片文件
