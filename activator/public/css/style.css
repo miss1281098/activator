@@ -208,7 +208,7 @@ body {
 /* 移动端适配 */
 @media (max-width: 768px) {
     body{
-        display: none;
+        display: block;
     }
 
     .container {
