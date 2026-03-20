@@ -207,8 +207,8 @@ export async function onRequest(context) {
     }
 
     function generateVersion1Code(applyCode) {
-        const code = applyCode + 80;
-        const activateCode = md5hex(code);
+        const code = Number(applyCode) + 80;
+        const activateCode = md5hex(code.toString());
         return activateCode;
     }
 
@@ -217,7 +217,7 @@ export async function onRequest(context) {
         return activateCode;
     }
 
-    function generateVersion3Code(applyCode, functionCode) {     
+    function generateVersion3Code(applyCode, functionCode) {
         const code = applyCode + KEY + functionCode;
         const activateCode = MD5Encrypt16(code);
         return activateCode;
