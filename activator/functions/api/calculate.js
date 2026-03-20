@@ -154,28 +154,42 @@ export async function onRequest(context) {
     }
 
     try {
-        const { applyCode, functionCode } = await request.json();
+        const { applyCode, functionCode, version } = await request.json();
 
-        // 验证输入
-        if (!applyCode || !functionCode) {
-            return new Response(JSON.stringify({ error: 'Missing parameters' }), {
-                status: 400,
-                headers: { 'Content-Type': 'application/json' }
-            });
+        // 根据版本使用不同的激活码生成逻辑
+        let activateCode = '';
+
+        if (version === 'version1') {
+            // Version 1 的激活码生成逻辑
+            activateCode = generateVersion1Code(applyCode);
+        } else if (version === 'version2') {
+            // Version 2 的激活码生成逻辑
+            activateCode = generateVersion2Code(applyCode);
+        } else if (version === 'version3') {
+            // Version 3 的激活码生成逻辑（原有逻辑）
+            activateCode = generateVersion3Code(applyCode, functionCode);
         }
 
-        // 验证申请码格式
-        const codeRegex = /^[a-zA-Z0-9]{10}$/;
-        if (!codeRegex.test(applyCode)) {
-            return new Response(JSON.stringify({ error: 'Invalid apply code format' }), {
-                status: 400,
-                headers: { 'Content-Type': 'application/json' }
-            });
-        }
+        // // 验证输入
+        // if (!applyCode || !functionCode) {
+        //     return new Response(JSON.stringify({ error: 'Missing parameters' }), {
+        //         status: 400,
+        //         headers: { 'Content-Type': 'application/json' }
+        //     });
+        // }
 
-        // 计算激活码
-        const code = applyCode + KEY + functionCode;
-        const activateCode = MD5Encrypt16(code);
+        // // 验证申请码格式
+        // const codeRegex = /^[a-zA-Z0-9]{10}$/;
+        // if (!codeRegex.test(applyCode)) {
+        //     return new Response(JSON.stringify({ error: 'Invalid apply code format' }), {
+        //         status: 400,
+        //         headers: { 'Content-Type': 'application/json' }
+        //     });
+        // }
+
+        // // 计算激活码
+        // const code = applyCode + KEY + functionCode;
+        // const activateCode = MD5Encrypt16(code);
 
         return new Response(JSON.stringify({
             success: true,
@@ -190,5 +204,22 @@ export async function onRequest(context) {
             status: 500,
             headers: { 'Content-Type': 'application/json' }
         });
+    }
+
+    function generateVersion1Code(applyCode) {
+        const code = applyCode + 80;
+        const activateCode = md5hex(code);
+        return activateCode;
+    }
+
+    function generateVersion2Code(applyCode) {
+        const activateCode = MD5Encrypt16(applyCode);
+        return activateCode;
+    }
+
+    function generateVersion3Code(applyCode, functionCode) {     
+        const code = applyCode + KEY + functionCode;
+        const activateCode = MD5Encrypt16(code);
+        return activateCode;
     }
 }

@@ -205,6 +205,49 @@ body {
     color: #4b5563;
 }
 
+/* 版本选择模块样式 */
+.version-group {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #e9ecef;
+}
+
+.radio-list {
+    display: flex;
+    gap: 30px;
+    margin-top: 10px;
+}
+
+.radio-item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.radio-item input[type="radio"] {
+    margin-right: 8px;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+}
+
+.radio-item span {
+    color: #495057;
+}
+
+/* 功能选项模块的显示/隐藏动画 */
+.checkbox-group {
+    transition: all 0.3s ease;
+}
+
+/* 当功能选项模块隐藏时的样式 */
+.checkbox-group[style*="display: none"] {
+    margin-bottom: 0;
+}
+
 /* 移动端适配 */
 @media (max-width: 768px) {
     body{
@@ -231,5 +274,14 @@ body {
     .checkbox-list {
         flex-direction: column;
         gap: 12px;
+    }
+
+    .radio-list {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .radio-item {
+        font-size: 14px;
     }
 }
