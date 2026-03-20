@@ -8,13 +8,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const activeCode = document.getElementById('active-code');
     const applyTips = document.getElementById('apply-tips');
 
-     // 版本选择单选按钮
-     const version1 = document.getElementById('version1');
-     const version2 = document.getElementById('version2');
-     const version3 = document.getElementById('version3');
-     
-     // 功能选项模块
-     const checkboxGroup = document.getElementById('checkboxGroup');
+    // 版本选择单选按钮
+    const version1 = document.getElementById('version1');
+    const version2 = document.getElementById('version2');
+    const version3 = document.getElementById('version3');
+
+    // 功能选项模块
+    const checkboxGroup = document.getElementById('checkboxGroup');
 
     // 对应C#的复选框
     const ckbSegmentFlotation = document.getElementById('ckbSegmentFlotation');
@@ -39,43 +39,44 @@ document.addEventListener('DOMContentLoaded', function () {
             ckbSegmentOvality.checked = false;
         }
     }
-    
+
     // 监听版本选择变化
     version1.addEventListener('change', toggleCheckboxGroup);
     version2.addEventListener('change', toggleCheckboxGroup);
     version3.addEventListener('change', toggleCheckboxGroup);
-    
+
     // 初始化显示状态
     toggleCheckboxGroup();
 
-     // 根据版本验证申请码格式
-     function validateApplyCodeByVersion(code, version) {
+    // 根据版本验证申请码格式
+    function validateApplyCodeByVersion(code, version) {
         if (version === 'version1') {
-            // Version 1: 全数字，不限长度（根据需求可调整）
-            const reg = /^\d+$/;
+            // Version 1: 全数字，支持负数（可以有负号）
+            // 匹配：可选的负号，后面跟数字（至少一位）
+            const reg = /^-?\d+$/;
             return reg.test(code);
         } else if (version === 'version2') {
-            // Version 2: 16位 字母/数字
-            const reg = /^[a-zA-Z0-9]{16}$/;
+            // Version 2: 16位16进制字符（0-9, A-F, a-f）
+            const reg = /^[0-9A-Fa-f]{16}$/;
             return reg.test(code);
         } else if (version === 'version3') {
-            // Version 3: 10位 字母/数字
-            const reg = /^[a-zA-Z0-9]{10}$/;
+            // Version 3: 10位16进制字符（0-9, A-F, a-f）
+            const reg = /^[0-9A-Fa-f]{10}$/;
             return reg.test(code);
         }
         return false;
     }
 
-     // 获取当前选中的版本
-     function getCurrentVersion() {
+    // 获取当前选中的版本
+    function getCurrentVersion() {
         if (version1.checked) return 'version1';
         if (version2.checked) return 'version2';
         if (version3.checked) return 'version3';
         return 'version3'; // 默认
     }
 
-       // 获取版本对应的验证规则描述
-       function getVersionValidationMessage(version) {
+    // 获取版本对应的验证规则描述
+    function getVersionValidationMessage(version) {
         if (version === 'version1') {
             return '全数字（不限长度）';
         } else if (version === 'version2') {
@@ -86,8 +87,8 @@ document.addEventListener('DOMContentLoaded', function () {
         return '';
     }
 
-     // 计算按钮点击事件
-     calcBtn.addEventListener('click', async () => {
+    // 计算按钮点击事件
+    calcBtn.addEventListener('click', async () => {
         const applyCodeVal = applyCode.value.trim();
         const currentVersion = getCurrentVersion();
         applyTips.textContent = '';
@@ -98,10 +99,10 @@ document.addEventListener('DOMContentLoaded', function () {
             applyTips.textContent = '❌ 请输入申请码';
             return;
         }
-        
+
         const validationResult = validateApplyCodeByVersion(applyCodeVal, currentVersion);
         const validationMessage = getVersionValidationMessage(currentVersion);
-        
+
         if (!validationResult) {
             const actualLength = applyCodeVal.length;
             if (currentVersion === 'version1') {
@@ -121,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             return;
         }
-        
+
         applyTips.style.color = '#00b42a';
         applyTips.textContent = `✅ 申请码格式正确（${validationMessage}）`;
 
@@ -135,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (ckbSegmentFlatness.checked) functionCode += 16;
             if (ckbSegmentOvality.checked) functionCode += 32;
         }
-        
+
         // 转为4位16进制字符串（对应C#的ToString("X4")）
         const strFunctionCode = functionCode.toString(16).toUpperCase().padStart(4, '0');
 
@@ -273,15 +274,15 @@ document.addEventListener('DOMContentLoaded', function () {
     applyCode.addEventListener('input', () => {
         const val = applyCode.value.trim();
         const currentVersion = getCurrentVersion();
-        
+
         if (val.length === 0) {
             applyTips.textContent = '';
             return;
         }
-        
+
         const validationResult = validateApplyCodeByVersion(val, currentVersion);
         const validationMessage = getVersionValidationMessage(currentVersion);
-        
+
         if (validationResult) {
             applyTips.style.color = '#00b42a';
             applyTips.textContent = `✅ 申请码格式正确（${validationMessage}）`;
@@ -304,7 +305,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     });
-    
+
     // 版本切换时，重新验证申请码
     version1.addEventListener('change', () => {
         if (applyCode.value.trim()) {
@@ -313,14 +314,14 @@ document.addEventListener('DOMContentLoaded', function () {
             applyCode.dispatchEvent(event);
         }
     });
-    
+
     version2.addEventListener('change', () => {
         if (applyCode.value.trim()) {
             const event = new Event('input');
             applyCode.dispatchEvent(event);
         }
     });
-    
+
     version3.addEventListener('change', () => {
         if (applyCode.value.trim()) {
             const event = new Event('input');
