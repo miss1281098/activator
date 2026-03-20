@@ -208,7 +208,7 @@ export async function onRequest(context) {
 
     function generateVersion1Code(applyCode) {
         const code = Number(applyCode) + 80;
-        const activateCode = md5hex(code.toString());
+        const activateCode = md5hex(code.toString()).toLowerCase();
         return activateCode;
     }
 
