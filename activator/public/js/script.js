@@ -289,19 +289,34 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             const actualLength = val.length;
             if (currentVersion === 'version1') {
-                if (!/^\d+$/.test(val)) {
-                    applyTips.style.color = '#ff7d00';
-                    applyTips.textContent = `⚠️ Version 1 要求全数字，当前包含非数字字符`;
+                if (!/^-?\d+$/.test(val)) {
+                    if (val.includes('-') && val.indexOf('-') !== 0) {
+                        applyTips.style.color = '#ff7d00';
+                        applyTips.textContent = `⚠️ Version 1 要求全数字，负号只能出现在开头`;
+                    } else {
+                        applyTips.style.color = '#ff7d00';
+                        applyTips.textContent = `⚠️ Version 1 要求全数字，当前包含非数字字符`;
+                    }
                 } else {
                     applyTips.style.color = '#ff7d00';
                     applyTips.textContent = `⚠️ Version 1 要求全数字`;
                 }
             } else if (currentVersion === 'version2') {
-                applyTips.style.color = '#ff7d00';
-                applyTips.textContent = `⚠️ Version 2 要求16位字母/数字（当前${actualLength}位）`;
+                if (!/^[0-9A-Fa-f]+$/.test(val)) {
+                    applyTips.style.color = '#ff7d00';
+                    applyTips.textContent = `⚠️ Version 2 要求16进制字符（0-9, A-F, a-f），当前包含非法字符`;
+                } else {
+                    applyTips.style.color = '#ff7d00';
+                    applyTips.textContent = `⚠️ Version 2 要求16位16进制字符（当前${actualLength}位）`;
+                }
             } else if (currentVersion === 'version3') {
-                applyTips.style.color = '#ff7d00';
-                applyTips.textContent = `⚠️ Version 3 要求10位字母/数字（当前${actualLength}位）`;
+                if (!/^[0-9A-Fa-f]+$/.test(val)) {
+                    applyTips.style.color = '#ff7d00';
+                    applyTips.textContent = `⚠️ Version 3 要求16进制字符（0-9, A-F, a-f），当前包含非法字符`;
+                } else {
+                    applyTips.style.color = '#ff7d00';
+                    applyTips.textContent = `⚠️ Version 3 要求10位16进制字符（当前${actualLength}位）`;
+                }
             }
         }
     });
